@@ -43,6 +43,10 @@ class ProcessingEngine:
                 cloud_provider.services[service][self.ruleset.rule_type][rule.key] = {}
                 cloud_provider.services[service][self.ruleset.rule_type][rule.key]['description'] = rule.description
                 cloud_provider.services[service][self.ruleset.rule_type][rule.key]['path'] = rule.path
+                cloud_provider.services[service][self.ruleset.rule_type][rule.key]['rule_id'] = rule.filename
+                if hasattr(rule, 'unified_check') and rule.unified_check is not None:
+                    cloud_provider.services[service][self.ruleset.rule_type][rule.key]['unified_check'] = \
+                        rule.unified_check
                 for attr in ['level', 'id_suffix', 'class_suffix', 'display_path']:
                     if hasattr(rule, attr):
                         cloud_provider.services[service][self.ruleset.rule_type][rule.key][attr] = getattr(rule, attr)

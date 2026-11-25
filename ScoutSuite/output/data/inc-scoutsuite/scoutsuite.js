@@ -469,6 +469,8 @@ function updateNavbar(path) {
     } else if (splitPath[0] === 'service_groups' && splitPath.length >= 2) {
         const group = splitPath[1]
         $('#' + group + navbarIdSuffix).addClass('active')
+    } else if (splitPath[0] === 'unified_checks') {
+        $('#unified_checks_navbar').addClass('active')
     }
 
     $('[id*="navbar"]').show()
@@ -946,6 +948,7 @@ function showResourcesDetails() {
  */
 function showMainDashboard() {
     hideAll()
+    $('#single-column').empty().hide()
     // Hide filters
     hideFilters()
     $('#findings_download_button').hide()
@@ -957,6 +960,69 @@ function showMainDashboard() {
     // Remove URL hash
     history.pushState('', document.title, window.location.pathname + window.location.search)
     updateNavbar('')
+}
+
+/**
+ * Escape untrusted report values before inserting them into the table.
+ */
+function escapeUnifiedCheckValue(value) {
+    return String(value === undefined || value === null ? '' : value)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#039;')
+}
+
+/**
+ * Show the provider-neutral checks as one table with one column per cloud.
+ */
+function showUnifiedChecks() {
+    hideAll()
+    hideFilters()
+    $('#findings_download_button').hide()
+    $('#paging_buttons').hide()
+    showRowWithItems('account_id')
+
+    var unifiedChecks = runResults['unified_checks']
+    if (!unifiedChecks || !unifiedChecks['checks']) {
+        $('#section_title-h2').text('Cross-cloud checks')
+        $('#single-column').html('<p>No cross-cloud check results are available.</p>').show()
+        return
+    }
+
+    var providers = unifiedChecks['providers'] || []
+    var html = '<div class="row"><div class="col-sm-12">'
+    html += '<h4>Cross-cloud checks</h4>'
+    html += '<table class="table table-striped unified-checks-table"><thead><tr>'
+    html += '<th>Unified check</th><th>Compliance</th>'
+    providers.forEach(function (provider) {
+        html += '<th>' + escapeUnifiedCheckValue(provider['name'] || provider['id']) + '</th>'
+    })
+    html += '</tr></thead><tbody>'
+
+    unifiedChecks['checks'].forEach(function (check) {
+        var controls = (check['compliance'] || []).map(function (control) {
+            return escapeUnifiedCheckValue(control['id'])
+        }).join('<br>')
+        html += '<tr><td><strong>' + escapeUnifiedCheckValue(check['title']) + '</strong><br>'
+        html += '<small>' + escapeUnifiedCheckValue(check['id']) + '</small></td>'
+        html += '<td><small>' + controls + '</small></td>'
+        providers.forEach(function (provider) {
+            var result = (check['providers'] || {})[provider['id']] || {}
+            var status = result['status'] || 'unknown'
+            html += '<td class="unified-check-' + escapeUnifiedCheckValue(status) + '">'
+            html += escapeUnifiedCheckValue(status.toUpperCase()) + '<br>'
+            html += '<small>' + escapeUnifiedCheckValue(result['checked'] || 0) + ' checked / '
+            html += escapeUnifiedCheckValue(result['passed'] || 0) + ' passed / '
+            html += escapeUnifiedCheckValue(result['failed'] || 0) + ' failed</small></td>'
+        })
+        html += '</tr>'
+    })
+
+    html += '</tbody></table></div></div>'
+    $('#single-column').html(html).show()
+    $('#section_title-h2').text('Cross-cloud checks')
 }
 
 /**
@@ -1133,7 +1199,9 @@ function updateDOM(anchor) {
     $('span').removeClass('finding-warning')
 
     // DOM Update
-    if (path === '') {
+    if (path === 'unified_checks') {
+        showUnifiedChecks()
+    } else if (path === '') {
         showMainDashboard()
     } else if (path.endsWith('.items')) {
         // Switch view for findings

@@ -70,6 +70,11 @@
             </ul>
 
             <ul class="nav navbar-nav ml-auto">
+              {{#ifUnifiedChecks}}
+              <li class="nav-item" id="unified_checks_navbar">
+                <a href="#unified_checks" class="nav-link">Cross-cloud checks</a>
+              </li>
+              {{/ifUnifiedChecks}}
               <li class="nav-item dropdown">
                 <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown">Filters</a>
                 <ul class="dropdown-menu" id="filters.list">

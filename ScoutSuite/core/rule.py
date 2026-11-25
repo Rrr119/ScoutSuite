@@ -43,6 +43,7 @@ class Rule:
         self.args = self.get_attribute('args', rule, [])
         self.conditions = self.get_attribute('conditions', rule, [])
         self.key_suffix = self.get_attribute('key_suffix', rule, None)
+        self.unified_check = self.get_attribute('unified_check', rule, None)
 
     @staticmethod
     def get_attribute(name, rule, default_value):

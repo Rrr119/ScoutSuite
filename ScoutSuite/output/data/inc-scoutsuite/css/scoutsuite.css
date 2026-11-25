@@ -92,6 +92,11 @@ body {
 .finding-danger { color:#ee293d; 
                   font-weight: bold;}
 
+.unified-check-pass { color: #23af44; font-weight: bold; }
+.unified-check-fail { color: #ee293d; font-weight: bold; }
+.unified-check-unknown,
+.unified-check-not_applicable { color: #777; font-weight: bold; }
+
 ul.no-bullet {
     list-style-type: none;
 }

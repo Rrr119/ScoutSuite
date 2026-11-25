@@ -36,6 +36,15 @@ Handlebars.registerHelper('jsonToString', function (obj) {
     return JSON.stringify(obj, null, 2).replace(/\r\n/g, `\r`).replace(/\n/g, `\r`)
 })
 
+Handlebars.registerHelper('ifUnifiedChecks', function (options) {
+    if (runResults && runResults['unified_checks'] &&
+        runResults['unified_checks']['checks'] &&
+        runResults['unified_checks']['checks'].length > 0) {
+        return options.fn(this)
+    }
+    return options.inverse(this)
+})
+
 Handlebars.registerHelper('has_profiles?', function (logins) {
     if (typeof logins !== 'undefined' && logins !== '') {
         return 'Yes'

@@ -1,0 +1,17 @@
+{
+  "root": "/home/dev/feedback/uid38833",
+  "B": "/home/dev/feedback/uid38833",
+  "sha": "f4ecf05b1243f5f0f6428ae2b695c10f65408f52",
+  "wslDistro": "Ubuntu-26.04",
+  "source": {
+    "owner": "nccgroup",
+    "repo": "ScoutSuite",
+    "sha": "f4ecf05b1243f5f0f6428ae2b695c10f65408f52"
+  },
+  "fork": {
+    "owner": "Rrr119",
+    "repo": "ScoutSuite",
+    "cloneUrl": "https://github.com/Rrr119/ScoutSuite.git"
+  },
+  "at": "2026-11-25T18:32:57.612Z"
+}

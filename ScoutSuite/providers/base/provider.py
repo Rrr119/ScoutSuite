@@ -66,6 +66,19 @@ class BaseProvider:
         """
         self._update_metadata()
         self._update_last_run(current_time, ruleset, run_parameters)
+        try:
+            from ScoutSuite.core.unified_checks import attach_unified_checks
+
+            self.unified_checks = attach_unified_checks(
+                self.provider_code,
+                {
+                    'provider_code': self.provider_code,
+                    'provider_name': getattr(self, 'provider_name', self.provider_code),
+                    'services': self.services,
+                },
+            )
+        except Exception as e:
+            print_exception(f'Unable to build unified checks: {e}')
 
     async def fetch(self, regions=None, excluded_regions=None, partition_name=None):
         """

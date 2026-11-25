@@ -1,5 +1,9 @@
 {
     "description": "Bucket Accessible by \"_ARG_0_\"",
+    "unified_check": {
+        "id": "storage.public_access",
+        "title": "Object storage is not publicly accessible"
+    },
     "rationale": "Allowing anonymous and/or public access grants permissions to anyone to access bucket content. Such access might not be desired if you are storing any sensitive data. Hence, ensure that anonymous and/or public access to a bucket is not allowed.",
     "remediation": "\"From console:<ol><li>Go to <samp>Storage browser</samp> by visiting https://console.cloud.google.com/storage/browser.</li><li>Click on the bucket name to go to its <samp>Bucket details</samp> page.</li><li>Click on the <samp>Permissions</samp> tab.</li><li>Click <samp>Delete</samp> button in front of <samp>allUsers</samp> and <samp>allAuthenticatedUsers</samp> to remove that particular role assignment.</li></ol>",
     "compliance": [
